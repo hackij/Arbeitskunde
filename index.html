@@ -603,7 +603,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
 .yl-labels{display:flex;justify-content:space-between;font-family:var(--f-mono);font-weight:300;font-size:.7rem;color:var(--muted);letter-spacing:.08em}
 </style>
 <div id="app"><div class="wrap"><p class="muted">Plan wird geladen …</p></div></div>
-<script>window.AK_CONFIG = {"github":{"owner":"hackij","repo":"Arbeitskunde","branch":"data","path":"data/state.json","iter":310000,"tokenStudents":{"salt":"Vxs0WN+fD8SlkAyJ6neqJg==","iter":310000,"iv":"9ua3j40jqEhvc62z","ct":"M7vUsNCqTzvb8z60Yp9minz4I3SnHLq+ymoazT/jlR91myQZ5PIZGe7CBh+Hu19iOyHOgpRvXaV7KbIp/bbuaWNnkZDLeGg3jR7cCx9FSo5QYGjVce4mGJjiC931cp51LXvGQSz19nGU+f21SQ=="},"tokenLecturer":{"salt":"RG3tRKKviESkq1VzEeGHew==","iter":310000,"iv":"M055r2SYWIe+skf7","ct":"dCk5/kI23jirD4QgcrPBHkQoCfFin3BOkC2HIpqPPvpLnZJg/jtuR7VCPloaGVWcjHqtWifW0Y31nX/5euemNVTxUc1zv5jumeWkyrqkTmrlGAmOLvgTPBEszNqENF8kLqDGDGfe43Kdp57hww=="}}};</script><script type="application/json" id="plan-data">{
+<script>window.AK_CONFIG = {"github":{"owner":"hackij","repo":"arbeitskunde","branch":"data","path":"data/state.json","iter":310000,"tokenStudents":{"salt":"iGhInG9IG69KNZcVoqGHJQ==","iter":310000,"iv":"QUTT8tbL1tYjcEJ4","ct":"wmNMRnJSKX3WgpP7kyopbXNlNheENcNV6m9ngulpGjVb2NKrpCrK2CT/3drSMpnOPvbZgB2vvLOn8HM9wYTgDjXlVYeIzA/VFmh8ZjeQgI2OOkSAUcBOygi6NrO8M6cT4br5MMGHKYgd0WapSw=="},"tokenLecturer":{"salt":"n9vy0if1ztUuMKOGQj/97A==","iter":310000,"iv":"5AIdK7btU+Hp7GcB","ct":"5r374JU5TR+Qtzc5pdA5XtlF/uURIIG+Da57gnUG3R+QCisAiq9KW9xFfofxEhXmfKA6kuGJGW/usw1HBg8LcwK4WWXB3ErQfMNAMI3CIp58h/wUsLpTaLk5+wTBKfaMfJJLNVWozH/auqCuiA=="}}};</script><script type="application/json" id="plan-data">{
 "rev": 16,
 "updated": "2026-10-07T12:00:00.000Z",
 "meta": {
@@ -3098,8 +3098,8 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (act === "up" || act === "down"){
       var i = +t.getAttribute("data-i"), j = act === "up" ? i-1 : i+1;
       if (j < 0 || j >= state.sessions.length) return;
-      var a = state.sessions[i], b = state.sessions[j], da = a.date, db = b.date;
-      state.sessions[i] = b; state.sessions[j] = a; b.date = da; a.date = db; // Termine bleiben am Platz, Inhalte wandern
+      var a = state.sessions[i], b = state.sessions[j], da = a.date, dtb = b.date;
+      state.sessions[i] = b; state.sessions[j] = a; b.date = da; a.date = dtb; // Termine bleiben am Platz, Inhalte wandern
       markDirty(); render(); return;
     }
     if (act === "gocase" || act === "viewcase"){ ui.viewUpd = null; ui.tab = "klasse"; ui.viewCase = t.getAttribute("data-id"); render(); return; }
