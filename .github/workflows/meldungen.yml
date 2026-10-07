@@ -1,0 +1,61 @@
+name: Meldungen freigeben
+
+# Gibt jeden Morgen die vorbereiteten Meldungen frei, deren Datum erreicht ist.
+# Braucht das Repository-Secret AK_DOZ_PASS (Dozierenden-Passwort).
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: meldungen
+  cancel-in-progress: false
+
+jobs:
+  freigeben:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fällige Meldungen freigeben
+        env:
+          AK_DOZ_PASS: ${{ secrets.AK_DOZ_PASS }}
+        run: |
+          cat > "$RUNNER_TEMP/freigabe.js" <<'JS'
+          const fs = require("fs"), { webcrypto: c } = require("crypto");
+          const P = "data/state.json", pass = process.env.AK_DOZ_PASS;
+          if (!pass) { console.log("Secret AK_DOZ_PASS fehlt."); process.exit(1); }
+          const s = JSON.parse(fs.readFileSync(P, "utf8"));
+          const b = x => Buffer.from(x, "base64");
+          (async () => {
+            if (!s.intern) { console.log("Keine internen Daten."); return; }
+            const k0 = await c.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+            const k = await c.subtle.deriveKey({ name: "PBKDF2", salt: b(s.intern.salt), iterations: s.intern.iter || 310000, hash: "SHA-256" }, k0, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+            const intern = JSON.parse(new TextDecoder().decode(await c.subtle.decrypt({ name: "AES-GCM", iv: b(s.intern.iv) }, k, b(s.intern.ct))));
+            const t = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Berlin", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+            const pub = u => { const o = { session: u.session || "", date: u.date || "", type: u.type || "", title: u.title || "", text: u.text || "", task: u.task || "", students: u.students || [] }; if (u.unlocks && u.unlocks.length) o.unlocks = u.unlocks; if (u.tokens) o.tokens = +u.tokens; o.id = u.id; return o; };
+            const r = (intern.updates || []).filter(u => u.date && u.date <= t).map(pub).sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+            if (JSON.stringify(r) === JSON.stringify(s.updates || [])) { console.log("Keine neue Meldung fällig."); return; }
+            s.updates = r; fs.writeFileSync(P, JSON.stringify(s));
+            console.log("Freigegeben: " + r.map(u => u.id + " " + u.title).join(" | "));
+          })().catch(() => { console.error("Entschlüsseln fehlgeschlagen. Stimmt das Secret AK_DOZ_PASS?"); process.exit(1); });
+          JS
+          git config user.name "Meldungen-Freigabe"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3 4 5; do
+            git fetch -q origin data && git reset -q --hard origin/data
+            node "$RUNNER_TEMP/freigabe.js"
+            git add data/state.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -q -m "Meldungen freigegeben" && git push -q origin HEAD:data && exit 0
+            sleep 7
+          done
+          exit 1
