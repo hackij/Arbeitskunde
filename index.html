@@ -603,7 +603,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
 .yl-labels{display:flex;justify-content:space-between;font-family:var(--f-mono);font-weight:300;font-size:.7rem;color:var(--muted);letter-spacing:.08em}
 </style>
 <div id="app"><div class="wrap"><p class="muted">Plan wird geladen …</p></div></div>
-<script>window.AK_CONFIG = {"github":{"owner":"hackij","repo":"arbeitskunde","branch":"data","path":"data/state.json","iter":310000,"tokenStudents":{"salt":"iGhInG9IG69KNZcVoqGHJQ==","iter":310000,"iv":"QUTT8tbL1tYjcEJ4","ct":"wmNMRnJSKX3WgpP7kyopbXNlNheENcNV6m9ngulpGjVb2NKrpCrK2CT/3drSMpnOPvbZgB2vvLOn8HM9wYTgDjXlVYeIzA/VFmh8ZjeQgI2OOkSAUcBOygi6NrO8M6cT4br5MMGHKYgd0WapSw=="},"tokenLecturer":{"salt":"n9vy0if1ztUuMKOGQj/97A==","iter":310000,"iv":"5AIdK7btU+Hp7GcB","ct":"5r374JU5TR+Qtzc5pdA5XtlF/uURIIG+Da57gnUG3R+QCisAiq9KW9xFfofxEhXmfKA6kuGJGW/usw1HBg8LcwK4WWXB3ErQfMNAMI3CIp58h/wUsLpTaLk5+wTBKfaMfJJLNVWozH/auqCuiA=="}}};</script><script type="application/json" id="plan-data">{
+<script>window.AK_CONFIG = {"github":{"owner":"hackij","repo":"arbeitskunde","branch":"data","path":"data/state.json","iter":310000,"tokenStudents":{"salt":"Ufk65IlLJDKo4Og6jrs0Dg==","iter":310000,"iv":"DqUoz1ZpD4ghK3ll","ct":"nD4x70NGSkmrsQccqn81qZwbIDtbhov2QRhi2hYZ0iZtz3liauPNDbUvPGJTjHv8bhQh42hjt8XF5ji4/diRk79HDt71fNXNxGWZqAEq/IicDUxazJBa8eUo9tyhwkEeCSSiW+18E/3EDZRWnw=="},"tokenLecturer":{"salt":"8+8tRhquRA4ejBxU4vxuqQ==","iter":310000,"iv":"7OJFoOehgn+ueDF8","ct":"xJ3Ua+tMNqvVHJr5WVY62txRZD+gfZYju13rl/9916bOaGyfXRJzNcqyvEZI6ROKy+QkuHubYWwCSKjDXz+zwDr7mHy6N+PAy4QfaqBdnwr2icjWAvrYJPIs9zL83yjbiQ0/vNSmlFG2/jXnyQ=="}}};</script><script type="application/json" id="plan-data">{
 "rev": 16,
 "updated": "2026-10-07T12:00:00.000Z",
 "meta": {
@@ -1551,6 +1551,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     var scrollY = window.scrollY;
     var ae = document.activeElement, focusId = ae && ae.id, selS = null, selE = null;
     try { if (ae && typeof ae.selectionStart === "number"){ selS = ae.selectionStart; selE = ae.selectionEnd; } } catch(e){}
+    if (!classOpen() && ui.tab === "klasse") ui.tab = "plan";
     checkPopup();
     if (!ui.entered){ app.innerHTML = renderWelcome() + (ui.toast ? '<div class="toast" role="status">' + esc(ui.toast) + '</div>' : ''); return; }
     var h = '<div class="wrap">' + renderHeader() + renderBanners();
@@ -1576,11 +1577,12 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
 
   function renderHeader(){
     var m = state.meta;
-    var tabs = [["plan","Plan"],["klasse","Klasse " + m.className]];
+    if (!classOpen() && ui.tab === "klasse") ui.tab = "plan";
+    var tabs = classOpen() ? [["plan","Plan"],["klasse","Klasse " + m.className]] : [["plan","Plan"]];
     if (editMode()){ tabs.push(["ideen","Ideen"]); tabs.push(["export","Einstellungen"]); }
     var TS = tokenState();
-    var right = '<span class="tokpill" title="Zeit-Token diese Woche: ' + TS.free + ' von ' + TS.total + ' frei">⏱ ' + TS.free + '<small>/' + TS.total + '</small></span>' + (probeMode() ? '' : '<button class="btn sm' + (unsaved() ? ' primary' : '') + '" data-act="flush"' + (unsaved() && !ui.saving ? '' : ' disabled') + ' title="Änderungen für alle speichern">Online speichern' + (pendingCount() ? ' (' + pendingCount() + ')' : '') + '</button>') + (canEdit ? (editMode() ? '<button class="pill edit" data-act="preview" title="Zur Studierendenansicht wechseln">Dozierende</button>' : '<button class="btn sm ghost" data-act="preview">Dozierende</button>') : '')
-      + '<button class="iconbtn" data-act="tour" aria-label="Tutorial starten" title="Tutorial">?</button>';
+    var right = (classOpen() ? '' : '<span hidden>') + '<span class="tokpill" title="Zeit-Token diese Woche: ' + TS.free + ' von ' + TS.total + ' frei">⏱ ' + TS.free + '<small>/' + TS.total + '</small></span>' + (probeMode() ? '' : '<button class="btn sm' + (unsaved() ? ' primary' : '') + '" data-act="flush"' + (unsaved() && !ui.saving ? '' : ' disabled') + ' title="Änderungen für alle speichern">Online speichern' + (pendingCount() ? ' (' + pendingCount() + ')' : '') + '</button>') + (canEdit ? (editMode() ? '<button class="pill edit" data-act="preview" title="Zur Studierendenansicht wechseln">Dozierende</button>' : '<button class="btn sm ghost" data-act="preview">Dozierende</button>') : '')
+      + (classOpen() ? '' : '</span>') + '<button class="iconbtn" data-act="tour" aria-label="Tutorial starten" title="Tutorial">?</button>';
     return '<header class="bar"><button class="home" data-act="home" title="Zur Startseite">' + logoSvg('h-logo', 6, 4) + '<b>' + esc(m.course) + '</b><span>' + esc(m.semester.replace("WS ","").replace("20","").replace("/20","/")) + '</span></button>'
       + '<nav class="tabs" role="tablist">' + tabs.map(function(t){ return '<button role="tab" id="tab-' + t[0] + '" aria-selected="' + (ui.tab === t[0]) + '" data-act="tab" data-v="' + t[0] + '">' + esc(t[1]) + (t[0] === "klasse" && freshUpdate() ? '<i class="newdot" title="Neue Meldung"></i>' : '') + '</button>'; }).join("") + '</nav>'
       + '<div class="bar-r">' + right + '</div></header>';
@@ -1594,6 +1596,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     return h;
   }
 
+  function classOpen(){ if (editMode() || state.meta.openEarly) return true; var s2 = state.sessions[1]; return !!(s2 && s2.date && todayISO() >= s2.date); }
   function sessRevealed(s, i){ if (editMode()) return true; if (i === 0) return true; return !!(s && s.date && todayISO() >= s.date); }
   function socioOpen(){ if (editMode()) return true; var s4 = state.sessions[3]; return !!(s4 && s4.date && todayISO() >= s4.date); }
   function seatColorEff(){ return ui.seatColor === "socio" && !socioOpen() ? "tag" : ui.seatColor; }
@@ -1865,7 +1868,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
       + '<p>Die Arbeitskunde konzentriert sich auf den <b>pädagogischen Bereich</b>: Wie entwickeln sich junge Menschen in Ausbildung? Was steckt hinter auffälligem Verhalten? Wie gestalte ich als Lehrkraft professionelle Beziehungen?</p>'
       + '<p>Das Leitbild der Staatlichen Berufsschule I Bayreuth greift dieselbe Trias auf: <b>Wissen · Wollen · Können</b>.</p>'
       + '<p class="quote">' + esc(state.meta.motto) + '</p>'
-      + '<p>Deshalb beginnen wir bei euch selbst: mit eurer Motivation, eurer Persönlichkeit und eurem Team. Erst danach richtet sich der Blick auf die Auszubildenden der ' + esc(state.meta.className) + '.</p>'
+      + '<p>Deshalb beginnen wir bei euch selbst: mit eurer Motivation, eurer Persönlichkeit und eurem Team. Erst danach richtet sich der Blick auf die Auszubildenden' + (classOpen() ? ' der ' + esc(state.meta.className) : '') + '.</p>'
       + '<ul><li>Arbeits-, Berufs- und Organisationspsychologie</li><li>Berufliche Sozialisation und Identitätsentwicklung</li><li>Entwicklungspsychologie des Jugend- und jungen Erwachsenenalters</li><li>Motivation, Selbstwirksamkeit, Kompetenzentwicklung</li><li>Kommunikation, Kooperation, Gruppenprozesse</li><li>Rollenverständnis und professionelle Beziehungen</li></ul></div></div>';
   }
 
@@ -2157,7 +2160,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   function releasedUpdates(){ var t = todayISO(); return allUpdates().filter(function(u){ return u.date && u.date <= t; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }); }
   function freshUpdate(){ var r = releasedUpdates(); if (!r.length) return null; var d = new Date(r[0].date + "T12:00:00"); return (Date.now() - d) < 3 * 864e5 ? r[0] : null; }
   function checkPopup(){
-    if (!ui.entered || editMode() || tour || ui.popup || ui.wahlShow || ui.editing || ui.measure || ui.seatDecide || ui.viewUpd || ui.ghLogin) return;
+    if (!ui.entered || editMode() || !classOpen() || tour || ui.popup || ui.wahlShow || ui.editing || ui.measure || ui.seatDecide || ui.viewUpd || ui.ghLogin) return;
     var r = releasedUpdates(), unseen = r.filter(function(u){ return !seenIds[u.id]; });
     if (!unseen.length) return;
     unseen.sort(function(a, b){ return String(b.date).localeCompare(String(a.date)) || ((b.kritik ? 1 : 0) - (a.kritik ? 1 : 0)); });
@@ -2779,6 +2782,11 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
       + (ui.dozDenied ? '<p class="w-deny">Der Dozierendenbereich ist nur für Dozierende mit Bearbeitungsrechten zugänglich.</p>' : '')
       + '</div><p class="w-credit">Entwickelt von Jan Hacker für die Universitätsberufsschule Bayreuth</p></main>';
   }
+  var TOUR_PRE = [
+    {tab:"plan", sel:"nav.tabs", t:"Navigation", x:"Hier findet ihr den Semesterplan. Im Laufe des Semesters kommen weitere Bereiche dazu."},
+    {tab:"plan", sel:".sess", t:"Semesterplan", x:"Jede Sitzung erscheint hier am Tag der Sitzung, mit Themen und Vorbereitung. „Details“ klappt Lernziele, Theorien und Literatur auf."},
+    {sel:"[data-act=tour]", t:"Das war's", x:"Das Tutorial startet ihr hier jederzeit neu. Bis zur nächsten Sitzung!"}
+  ];
   var TOUR = [
     {tab:"plan", sel:"nav.tabs", t:"Navigation", x:"Hier wechselt ihr zwischen dem Semesterplan und eurer Klasse E10a."},
     {tab:"plan", sel:".sess", t:"Semesterplan", x:"Alle 14 Sitzungen mit Themen und dem Auftrag für eure Teamsitzung. „Details“ klappt Lernziele, Theorien und Literatur auf."},
@@ -2796,8 +2804,9 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   ];
   var tour = null;
   var tourLater = false;
-  function tourStart(){ tour = {i:0}; tourShow(); }
-  function tourEnd(){ tour = null; var el = document.getElementById("tour"); if (el) el.remove(); try { localStorage.setItem("arbeitskunde-tour", "1"); } catch(e){} }
+  var TOUR_FULL = TOUR;
+  function tourStart(){ TOUR = classOpen() ? TOUR_FULL : TOUR_PRE; tour = {i:0}; tourShow(); }
+  function tourEnd(){ tour = null; var el = document.getElementById("tour"); if (el) el.remove(); try { var tv = localStorage.getItem("arbeitskunde-tour"); localStorage.setItem("arbeitskunde-tour", TOUR === TOUR_FULL || tv === "1" ? "1" : "pre"); } catch(e){} }
   function tourShow(){
     if (!tour) return;
     var st = TOUR[tour.i]; if (!st){ tourEnd(); return; }
@@ -3151,7 +3160,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (act === "closemeasure"){ ui.measure = null; render(); return; }
     if (act === "submitmeasure"){ submitMeasure(); return; }
     if (act === "bookseg"){ ui.bookSeg = t.getAttribute("data-v"); render(); return; }
-    if (act === "enter"){ ui.entered = "stud"; ui.preview = true; try { sessionStorage.setItem("arbeitskunde-in", "stud"); } catch(e){} ui.tab = "plan"; render(); window.scrollTo(0,0); var done = false; try { done = !!localStorage.getItem("arbeitskunde-tour"); } catch(e){} if (!done) setTimeout(function(){ if (ui.popup || ui.viewUpd) tourLater = true; else tourStart(); }, 250); return; }
+    if (act === "enter"){ ui.entered = "stud"; ui.preview = true; try { sessionStorage.setItem("arbeitskunde-in", "stud"); } catch(e){} ui.tab = "plan"; render(); window.scrollTo(0,0); var done = false; try { var tv0 = localStorage.getItem("arbeitskunde-tour"); done = classOpen() ? tv0 === "1" : !!tv0; } catch(e){} if (!done) setTimeout(function(){ if (ui.popup || ui.viewUpd) tourLater = true; else tourStart(); }, 250); return; }
     if (act === "enterdoz" && GH && !canEdit){ ui.dozPrompt = {}; render(); var dp = document.getElementById("doz-pass"); if (dp) dp.focus(); return; }
     if (act === "dozlogin"){ var pv = (document.getElementById("doz-pass") || {}).value || ""; if (pv) ghLecturer(pv, false); return; }
     if (act === "ghcancel"){ ui.ghLogin = null; render(); return; }
@@ -3279,6 +3288,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (dr && dr.data && JSON.stringify(dr.data) !== JSON.stringify(saved)) ui.restore = dr; else if (dr) clearDraft();
   } catch(e){}
   render();
+  try { if (ui.entered === "stud" && !pendingDoz && classOpen() && localStorage.getItem("arbeitskunde-tour") === "pre") setTimeout(function(){ if (!editMode()){ if (ui.popup || ui.viewUpd) tourLater = true; else tourStart(); } }, 600); } catch(e){}
 
   if (window.claude && window.claude.use){
     connectDb();
