@@ -1,10 +1,12 @@
 name: Meldungen freigeben
 
-# Gibt jeden Morgen die vorbereiteten Meldungen frei, deren Datum erreicht ist.
+# Gibt jeden Morgen die vorbereiteten Meldungen frei, deren Datum erreicht ist
+# (gleiche Logik wie die App bei der Dozierenden-Anmeldung).
+# Liest und schreibt data/arbeitskunde.json auf dem Zweig "daten".
 # Braucht das Repository-Secret AK_DOZ_PASS (Dozierenden-Passwort).
 on:
   schedule:
-    - cron: "17 2 * * *"
+    - cron: "17 2 * * *"   # täglich 03:17 (Winter) bzw. 04:17 (Sommer) deutscher Zeit
   workflow_dispatch:
 
 permissions:
@@ -17,10 +19,13 @@ concurrency:
 jobs:
   freigeben:
     runs-on: ubuntu-latest
+    env:
+      DATA_BRANCH: daten
+      DATA_FILE: data/arbeitskunde.json
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: data
+          ref: ${{ env.DATA_BRANCH }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
@@ -31,31 +36,39 @@ jobs:
         run: |
           cat > "$RUNNER_TEMP/freigabe.js" <<'JS'
           const fs = require("fs"), { webcrypto: c } = require("crypto");
-          const P = "data/state.json", pass = process.env.AK_DOZ_PASS;
-          if (!pass) { console.log("Secret AK_DOZ_PASS fehlt."); process.exit(1); }
+          const P = process.env.DATA_FILE, pass = process.env.AK_DOZ_PASS;
+          if (!pass) { console.error("Secret AK_DOZ_PASS fehlt."); process.exit(1); }
+          if (!fs.existsSync(P)) { console.error("Datei " + P + " fehlt auf dem Zweig."); process.exit(1); }
           const s = JSON.parse(fs.readFileSync(P, "utf8"));
           const b = x => Buffer.from(x, "base64");
           (async () => {
             if (!s.intern) { console.log("Keine internen Daten."); return; }
-            const k0 = await c.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
-            const k = await c.subtle.deriveKey({ name: "PBKDF2", salt: b(s.intern.salt), iterations: s.intern.iter || 310000, hash: "SHA-256" }, k0, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
-            const intern = JSON.parse(new TextDecoder().decode(await c.subtle.decrypt({ name: "AES-GCM", iv: b(s.intern.iv) }, k, b(s.intern.ct))));
+            let intern;
+            try {
+              const k0 = await c.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+              const k = await c.subtle.deriveKey({ name: "PBKDF2", salt: b(s.intern.salt), iterations: s.intern.iter || 310000, hash: "SHA-256" }, k0, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+              intern = JSON.parse(new TextDecoder().decode(await c.subtle.decrypt({ name: "AES-GCM", iv: b(s.intern.iv) }, k, b(s.intern.ct))));
+            } catch (e) { console.error("Entschlüsseln fehlgeschlagen. Stimmt das Secret AK_DOZ_PASS?"); process.exit(1); }
             const t = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Berlin", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
             const pub = u => { const o = { session: u.session || "", date: u.date || "", type: u.type || "", title: u.title || "", text: u.text || "", task: u.task || "", students: u.students || [] }; if (u.unlocks && u.unlocks.length) o.unlocks = u.unlocks; if (u.tokens) o.tokens = +u.tokens; o.id = u.id; return o; };
             const r = (intern.updates || []).filter(u => u.date && u.date <= t).map(pub).sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
-            if (JSON.stringify(r) === JSON.stringify(s.updates || [])) { console.log("Keine neue Meldung fällig."); return; }
+            const alt = new Set((s.updates || []).map(u => u.id));
+            if (JSON.stringify(r) === JSON.stringify(s.updates || [])) { console.log(t + ": Keine neue Meldung fällig."); return; }
             s.updates = r; fs.writeFileSync(P, JSON.stringify(s));
-            console.log("Freigegeben: " + r.map(u => u.id + " " + u.title).join(" | "));
-          })().catch(() => { console.error("Entschlüsseln fehlgeschlagen. Stimmt das Secret AK_DOZ_PASS?"); process.exit(1); });
+            const neu = r.filter(u => !alt.has(u.id));
+            const msg = t + ": freigegeben – " + (neu.length ? neu.map(u => u.id + " „" + u.title + "“").join(", ") : "Änderungen an bestehenden Meldungen");
+            console.log(msg);
+            if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, msg + "\n");
+          })();
           JS
           git config user.name "Meldungen-Freigabe"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for i in 1 2 3 4 5; do
-            git fetch -q origin data && git reset -q --hard origin/data
+            git fetch -q origin "$DATA_BRANCH" && git reset -q --hard "origin/$DATA_BRANCH"
             node "$RUNNER_TEMP/freigabe.js"
-            git add data/state.json
+            git add "$DATA_FILE"
             if git diff --cached --quiet; then exit 0; fi
-            git commit -q -m "Meldungen freigegeben" && git push -q origin HEAD:data && exit 0
+            git commit -q -m "Meldungen freigegeben" && git push -q origin "HEAD:$DATA_BRANCH" && exit 0
             sleep 7
           done
           exit 1
