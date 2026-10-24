@@ -8,7 +8,7 @@
 <body>
 <script>
   // ► Hier die Adresse eures Cloudflare Workers eintragen (siehe ANLEITUNG.md), z. B. "https://arbeitskunde.eure-subdomain.workers.dev"
-  window.AK_CONFIG = {"github":{"owner":"hackij","repo":"Arbeitskunde","branch":"daten","path":"data/arbeitskunde.json","iter":310000,"tokenStudents":{"salt":"977w1Y5102OAf5fg9nUiwQ==","iter":310000,"iv":"6EG+c8640IiTCApE","ct":"YEbsafx1ubSou7ao29/Z3F4jj2OkhcX7f8jpoZExf+bWty3iV2VCKjBazFyQNvlPNZDbHocGCKzs1ENCzmkrTdnIDy2khedOXDL5Dr4btlmnqnVc1ndLV00CpC0b0bwaBO/5T7j44Jh84Eh8xw=="},"tokenLecturer":{"salt":"FSaULSf0fP0209b9afo9iw==","iter":310000,"iv":"Zf1msMRGBV9kP+nE","ct":"EMgAD7YD0NBYlI8gJWE6ccvj41UWqYEbAvj3pSPnOPKVtgMuWl0DORyBsFUZeLmf6ueLDISlyb3c1Sso7XQaGHZwrqxF71zYwvTiYXVx1hwQK7xqKKq2FMzGmFAHBYzQIX4Fdwq/dr1AsjBNTw=="}}};
+  window.AK_CONFIG = {"github":{"owner":"hackij","repo":"arbeitskunde","branch":"daten","path":"data/arbeitskunde.json","iter":310000,"tokenStudents":{"salt":"vZd32w+iuEk869k0ZJAzkQ==","iter":310000,"iv":"qI/2lcwCEF+1CgTp","ct":"9059s4SeNbCPa4O9uDR5Duuhv1hepq/RVEmggb78xKVkt5/qfqyIqaF+iRbGK93V3FpZvWUgUzZOSHjjS5fR9jQASX6NTUh7QOLs1Ku5phIHaUwJ0OIx50/JBrwEXTkh0yOe68P6k4yABtUM8Q=="},"tokenLecturer":{"salt":"cZhTqtCRiMRVmxuwpwqi0g==","iter":310000,"iv":"ynhcVHsk+OgyYz+D","ct":"Q2AIiEuqf+Rlyy4QoADo0lZ8cPxwp79NqXUYcGA/mgws7iZUunU6WZ9QPcjy7MDbHltkr5JLB5Q9E0e/a/BOPYN2zDIu2opJeh3hrbPicPYp/zeab3piAWNtFHDJFuzS73miaSi8VRDk0Q015A=="}}};
 </script>
 
 
@@ -274,6 +274,41 @@ details.more[open]>summary::before{transform:rotate(90deg)}
 .sd-opt-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
 .sd-theory{display:grid;gap:6px;padding:12px 14px;border-radius:14px;background:rgba(207,233,218,.45)}
 .sd-theory ul{margin:0;padding-left:1.1em;display:grid;gap:3px;font-size:.92rem}
+/* Soziogramm */
+.sg-wrap{display:grid;gap:8px}
+.sg{width:100%;height:auto;max-width:420px;display:block;margin:0 auto}
+.sg.sg-big{max-width:560px}
+.sg-ring{fill:none;stroke:rgba(0,146,96,.12);stroke-dasharray:3 5}
+.sg-ch{stroke:#4f9a7a;stroke-width:1.3;opacity:.75}
+.sg-mut{stroke:var(--uni);stroke-width:3.2;stroke-linecap:round}
+.sg-rej{stroke:#c8102e;stroke-width:1.2;stroke-dasharray:4 3;opacity:.7}
+.sg-n circle{fill:#fff;stroke:var(--uni);stroke-width:2}
+.sg-n.sg-iso circle{stroke:#6f7a86;stroke-dasharray:3 2}
+.sg-n.sg-rjn circle{stroke:#c8102e}
+.sg-num{font:700 12px var(--f-body);text-anchor:middle;fill:var(--fg)}
+.sg-lbl{font:600 11px var(--f-body);text-anchor:middle;fill:var(--fg);paint-order:stroke;stroke:rgba(255,255,255,.9);stroke-width:3px}
+.sg-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted)}
+.sg-legend span{display:inline-flex;align-items:center;gap:6px}
+.sg-k{display:inline-block;width:22px;height:0;border-top:2px solid #4f9a7a}
+.sg-k-mut{border-top:4px solid var(--uni)}
+.sg-k-rej{border-top:2px dashed #c8102e}
+.sg-k-n{width:18px;height:18px;border:2px solid var(--uni);border-radius:50%;font-style:normal;font-size:.7rem;font-weight:700;display:inline-grid;place-items:center;color:var(--fg)}
+.sg-find{margin:0;padding-left:1.1em;display:grid;gap:4px;font-size:.9rem}
+.sg-pop{width:min(980px,calc(100% - 24px));max-height:calc(100vh - 24px);overflow:auto}
+.sg-pop-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:760px){.sg-pop-grid{grid-template-columns:1fr}}
+.sg-side .sg{max-width:260px}
+.sg-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.sg-seg .btn{white-space:nowrap}
+.sg-main{display:grid;gap:6px;align-content:start;min-width:0}
+.sg-sidepanel{display:grid;gap:10px;align-content:start}
+.sg-find{display:grid;gap:6px;font-size:.92rem;padding:0;margin:0;list-style:none}
+.sg-find h3{font-size:1.05rem}
+.sg-dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:3px solid;background:#fff}
+.sg-pop .sg{max-width:none}
+.sg-side .sg{max-width:100%}
+.sg-pop-grid{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+@media (max-width:760px){.sg-pop-grid{grid-template-columns:1fr}}
 /* Ticker */
 .ticker{gap:12px}
 .tk-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -1562,6 +1597,9 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     var app = document.getElementById("app");
     try { var rs = document.documentElement.style; if (/^#[0-9a-f]{6}$/i.test(state.meta.colorUni||"")) rs.setProperty("--uni-base", state.meta.colorUni); if (/^#[0-9a-f]{6}$/i.test(state.meta.colorSchool||"")) rs.setProperty("--school-base", state.meta.colorSchool); } catch(e){}
     var scrollY = window.scrollY;
+    // Scrollpositionen von scrollbaren Bereichen (Schubladen, Popups, Ticker …) über das Neuzeichnen retten
+    var SCROLL_SEL = ".drawer .form, .popup, .tk-track, .floor-wrap, .tablewrap, .room, .zoom", keep = {};
+    try { Array.prototype.forEach.call(document.querySelectorAll(SCROLL_SEL), function(el, i){ var host = el.closest("[aria-label]"); var k = (host ? host.getAttribute("aria-label") : "") + "|" + el.className + "|" + i; if (el.scrollTop || el.scrollLeft) keep[k] = [el.scrollTop, el.scrollLeft]; }); } catch(e){}
     var ae = document.activeElement, focusId = ae && ae.id, selS = null, selE = null;
     try { if (ae && typeof ae.selectionStart === "number"){ selS = ae.selectionStart; selE = ae.selectionEnd; } } catch(e){}
     if (!classOpen() && ui.tab === "klasse") ui.tab = "plan";
@@ -1574,6 +1612,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     else if (ui.tab === "ideen") h += renderIdeas();
     h += '<footer class="foot"><span>' + esc(state.meta.course) + ' · ' + esc(state.meta.semester) + '</span><span class="mono">Version ' + esc(saved.rev) + '</span></footer></div>';
     if (ui.editing) h += renderDrawer();
+    else if (ui.soziShow) h += renderSozio();
     else if (ui.wahlShow) h += renderWahl();
     else if (ui.popup) h += renderPopup();
     else if (ui.ghLogin) h += renderGhLogin();
@@ -1584,7 +1623,9 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (unsaved()) h += '<div class="savebar" role="region" aria-label="Ungespeicherte Änderungen"><span>' + (pendingCount() ? pendingCount() + (pendingCount() === 1 ? ' Änderung' : ' Änderungen') + ' in der Klasse' : '') + (pendingCount() && dirty && canEdit ? ' · ' : '') + (dirty && canEdit ? 'Planänderungen' : '') + ' – noch nicht gespeichert' + (pending.seating && live.seating && live.seating.at && live.seating.at !== pending.seating.base ? '<br><small>Inzwischen hat jemand anderes den Sitzplan gespeichert. Beim Speichern gilt euer Stand.</small>' : '') + '</span><button class="btn ghost" data-act="discard">Verwerfen</button><button class="btn" data-act="flush"' + (ui.saving ? " disabled" : "") + '>' + (ui.saving ? "Speichert …" : "Online speichern") + '</button></div>';
     if (ui.toast) h += '<div class="toast" role="status">' + esc(ui.toast) + '</div>';
     app.innerHTML = h;
-    if (focusId){ var el = document.getElementById(focusId); if (el){ el.focus(); if (selS !== null && el.setSelectionRange){ try{ el.setSelectionRange(selS, selE); }catch(e){} } } }
+    // Fokus nur für Eingabefelder wiederherstellen und dabei nie scrollen (sonst springt die Seite z. B. zum angeklickten Reiter nach oben)
+    if (focusId){ var el = document.getElementById(focusId); if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)){ try { el.focus({preventScroll:true}); } catch(e){ el.focus(); } if (selS !== null && el.setSelectionRange){ try{ el.setSelectionRange(selS, selE); }catch(e){} } } }
+    try { Array.prototype.forEach.call(document.querySelectorAll(SCROLL_SEL), function(el, i){ var host = el.closest("[aria-label]"); var k = (host ? host.getAttribute("aria-label") : "") + "|" + el.className + "|" + i; if (keep[k]){ el.scrollTop = keep[k][0]; el.scrollLeft = keep[k][1]; } }); } catch(e){}
     if (!tour) window.scrollTo(0, scrollY); else tourPlace();
   }
 
@@ -2154,7 +2195,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   function releasedUpdates(){ var t = todayISO(); return allUpdates().filter(function(u){ return u.date && u.date <= t; }).sort(function(a,b){ return String(b.date).localeCompare(String(a.date)); }); }
   function freshUpdate(){ var r = releasedUpdates(); if (!r.length) return null; var d = new Date(r[0].date + "T12:00:00"); return (Date.now() - d) < 3 * 864e5 ? r[0] : null; }
   function checkPopup(){
-    if (!ui.entered || editMode() || !classOpen() || tour || ui.popup || ui.wahlShow || ui.editing || ui.measure || ui.seatDecide || ui.viewUpd || ui.ghLogin) return;
+    if (!ui.entered || editMode() || !classOpen() || tour || ui.popup || ui.wahlShow || ui.soziShow || ui.editing || ui.measure || ui.seatDecide || ui.viewUpd || ui.ghLogin) return;
     var r = releasedUpdates(), unseen = r.filter(function(u){ return !seenIds[u.id]; });
     if (!unseen.length) return;
     unseen.sort(function(a, b){ return String(b.date).localeCompare(String(a.date)) || ((b.kritik ? 1 : 0) - (a.kritik ? 1 : 0)); });
@@ -2224,7 +2265,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (pair("lukas","deniz")) add("lukas_deniz","+","Gemeinsames Technik-Thema","Deniz zeigt Lukas ein Video über Smart-Home-Technik. Lukas erklärt ihm, wie man das programmiert. Die beiden kommen ins Gespräch.",["lukas","deniz"],{zug:5});
     if (pair("nico","deniz")) add("nico_deniz","-","Die laute Ecke","Nico und Deniz schaukeln sich gegenseitig hoch. Ihr Tisch ist kaum noch zu bremsen.",["nico","deniz"],{ruhe:-10});
     if (near("nico","dennis")) add("nico_dennis","-","Sticheleien","Nico macht sich vor allen darüber lustig, dass Dennis im Unterricht fast einschläft. Dennis verlässt wütend den Raum.",["nico","dennis"],{konf:-8});
-    if (near("dennis","max")) add("dennis_max","-","Offene Rechnung","Zwischen Dennis und Max steht die Sache mit den 80 Euro. Keiner redet mit dem anderen, die Stimmung ist gereizt.",["dennis","max"],{konf:-6});
+    if (near("dennis","max")) add("dennis_max","-","Offene Rechnung",(todayISO() >= "2026-12-22" ? "Zwischen Dennis und Max steht die Sache mit den 80 Euro. Keiner redet mit dem anderen, die Stimmung ist gereizt." : "Max findet Dennis unzuverlässig, Dennis fühlt sich von Max von oben herab behandelt. Nebeneinander ist die Stimmung gereizt."),["dennis","max"],{konf:-6});
     if (front("nico")) add("nico_vorn","±","Nico vorn","Nico fühlt sich vorgeführt und provoziert mehr. Die hinteren Plätze werden dafür deutlich ruhiger.",["nico"],{ruhe:4,konf:-3});
     if (near("nico","florian")) add("nico_florian","+","Florian bremst Nico","Wenn Nico loslegt, sagt Florian trocken: „Komm, lass gut sein.“ Erstaunlich oft hört Nico auf ihn.",["nico","florian"],{ruhe:6});
     if (front("jonas")) add("jonas_vorn","+","Jonas sitzt vorn","Näher an der Lehrkraft verliert Jonas seltener den Faden und bekommt schneller Rückmeldung.",["jonas"],{lern:5});
@@ -2273,6 +2314,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
       {k:"kammer", label:"Ausbildungsberatung der Kammer", d:"Bei Konflikten im Betrieb oder drohendem Ausbildungsabbruch.", react:"beratung", eff:{lern:2}},
       {k:"sucht", label:"Suchtberatung vermitteln", d:"Bei problematischem Konsum von Medien, Cannabis oder Alkohol.", react:"beratung", eff:{zug:1}}]},
     {id:"gemeinschaft", label:"Klassengemeinschaft", items:[
+      {k:"bef_sozio", label:"Soziometrische Befragung (Soziogramm)", d:"Wer möchte neben wem sitzen, neben wem lieber nicht? Alle füllen vertraulich einen Zettel aus, ihr erhaltet das Soziogramm der Klasse als Grundlage für den Sitzplan.", react:"bef_sozio", eff:{zug:1}, all:true},
       {k:"wahl", label:"Klassensprecherwahl", d:"Wahl von Klassensprecher/in und Stellvertretung mit Stimmzetteln. Zeitaufwendig: Kandidaturen vorstellen, wählen, auszählen.", react:"wahl", eff:{zug:3,konf:1}, all:true, once:true},
       {k:"regel", label:"Klassenregeln einführen", d:"Einzelne Regeln mit der Klasse vereinbaren, z. B. zu Handy, Umgangston, Pünktlichkeit oder Werkstatt.", react:"regel", eff:{ruhe:4,konf:2}},
       {k:"vertrag", label:"Klassenvertrag beschließen", d:"Die ganze Klasse erarbeitet gemeinsam einen Kodex, unterschreibt ihn und hängt ihn im Klassenzimmer auf. Gilt für alle.", react:"vertrag", eff:{ruhe:5,konf:4,zug:3}, all:true},
@@ -2287,7 +2329,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   // ältere Einträge
   [["gespraech","Einzelgespräch",{zug:2,konf:1}],["beratung","Beratung einbeziehen",{zug:2}],["foerder","Förderplan oder Nachteilsausgleich",{lern:4}],["sonst","Sonstige Maßnahme",{lern:1}],["sitzordnung","Sitzordnung",{}],["bef_plenum","Befragung im Plenum",{zug:1}],["bef_anonym","Anonyme Befragung",{zug:2}],["bef_einzel","Einzelgespräche zur Sitzordnung",{zug:1}],["bef_ks","Klassensprecher befragt",{zug:1}]].forEach(function(a){ if (!MKIND[a[0]]) MKIND[a[0]] = {k:a[0], label:a[1], eff:a[2], react:a[0], hidden:true}; });
   // ---------- Zeit-Token ----------
-  var TCOST = {wahl:4, sitzordnung:2, bef_plenum:1, bef_anonym:2, bef_einzel:1, bef_ks:1, vier:2, tuer:1, eltern:2, anruf:1, betrieb:2, schulleitung:2, runder:4, struktur:2, sprach:3, differenz:3, tutor:1, staerken:1, foerderplan:3, nachteil:2, notenschutz:2, einzel:1, klein:1, daz:1, coaching:1, beratungslk:1, schulpsych:1, jas:1, kammer:1, sucht:1, regel:2, vertrag:4, workshop:4, praevention:3, ermahnung:1, verweis:2, gespraech:2, beratung:1, foerder:3, sonst:1};
+  var TCOST = {bef_sozio:2, wahl:4, sitzordnung:2, bef_plenum:1, bef_anonym:2, bef_einzel:1, bef_ks:1, vier:2, tuer:1, eltern:2, anruf:1, betrieb:2, schulleitung:2, runder:4, struktur:2, sprach:3, differenz:3, tutor:1, staerken:1, foerderplan:3, nachteil:2, notenschutz:2, einzel:1, klein:1, daz:1, coaching:1, beratungslk:1, schulpsych:1, jas:1, kammer:1, sucht:1, regel:2, vertrag:4, workshop:4, praevention:3, ermahnung:1, verweis:2, gespraech:2, beratung:1, foerder:3, sonst:1};
   function tokenCost(k){ return TCOST[k] != null ? TCOST[k] : 1; }
   function tokensDefault(){ var n = parseInt(state.meta.tokensPerSession, 10); return isNaN(n) ? 6 : n; }
   function localDate(iso){ var d = new Date(iso); if (isNaN(d)) return ""; return d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2); }
@@ -2502,7 +2544,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (seatColorEff() === "socio") h += '<div class="legend" style="margin-top:10px"><span><i class="so-badge b-beliebt">★</i>beliebt</span><span><i class="so-badge b-abgelehnt">✕</i>abgelehnt</span><span><i class="so-badge b-vernachlaessigt">○</i>vernachlässigt</span><span><i class="so-badge b-kontrovers">±</i>kontrovers</span><span><i class="lg-avg"></i>durchschnittlich</span></div>';
     if (unplaced.length || !viewingOld) h += '<div class="tray" data-drop="tray"><p class="lbl">Ohne Platz</p><div class="chips">' + (unplaced.length ? unplaced.map(function(c){ var sel = ui.seatSel && ui.seatSel.kind === "student" && ui.seatSel.id === c.id; return '<button class="chip chip-av' + (sel ? " sel" : "") + '" draggable="true" data-act="seatstu" data-id="' + esc(c.id) + '" data-dragstu="' + esc(c.id) + '">' + avatarHtml(c, 20) + esc(firstName(c)) + '</button>'; }).join("") : '<span class="muted small">Alle haben einen Platz. Einen Platz hierher ziehen, um ihn frei zu machen.</span>') + '</div></div>';
     if (editMode() && !viewingOld) h += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn sm" data-act="seatsaveask">Aktuellen Stand als Version festhalten</button>' + (ui.confirmReset ? '<span class="small">Sitzplan, Maßnahmen und Entwicklungen für alle löschen?</span><button class="btn sm danger" data-act="resetyes">Ja, auf Normalzustand zurücksetzen</button><button class="btn sm" data-act="resetno">Abbrechen</button>' : '<button class="btn sm danger" data-act="resetall">Auf Normalzustand zurücksetzen</button>') + '</div>';
-    h += '</div><aside class="seat-side">' + climateHtml(map, L)
+    h += '</div><aside class="seat-side">' + climateHtml(map, L) + (function(){ var sl = soziLatest(); return sl ? '<div class="sg-side"><p class="lbl">Soziogramm vom ' + esc(fmtDate(localDate(sl.at))) + '</p>' + soziHtml(sl.result, true) + '</div>' : ''; })()
       + '<div class="dyn"><p class="lbl">Gerade in der Klasse</p>' + (dyn.length ? (function(){ function one(x){ return '<div class="dyn-i t' + (x.tone === "+" ? "p" : x.tone === "-" ? "m" : "o") + '"><b>' + esc(x.title) + '</b><span>' + esc(x.text) + '</span></div>'; } return dyn.slice(0,4).map(one).join("") + (dyn.length > 4 ? '<details class="more"><summary>' + (dyn.length - 4) + ' weitere</summary><div class="dyn" style="margin-top:8px">' + dyn.slice(4).map(one).join("") + '</div></details>' : ''); })() : '<p class="muted small">Keine besonderen Dynamiken.</p>') + '</div>'
       + '<button class="btn primary" data-act="newmeasure" style="justify-self:start">Maßnahme ergreifen</button></aside></div>';
     return h;
@@ -2534,6 +2576,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     bef_plenum:{label:"Klasse im Plenum befragen", d:"Offene Abstimmung per Handzeichen mit kurzer Diskussion. Geht schnell, alle hören, was die anderen sagen.", cost:1},
     bef_anonym:{label:"Klasse anonym befragen", d:"Zettelabfrage mit Wunsch und freiem Kommentar, danach auswerten. Braucht mehr Zeit, niemand muss sich vor den anderen festlegen.", cost:2},
     bef_einzel:{label:"Einzelne Auszubildende befragen", d:"Kurze Gespräche unter vier Augen mit bis zu drei Auszubildenden, die ihr auswählt.", cost:1, max:3},
+    bef_sozio:{label:"Soziometrische Befragung (Soziogramm)", d:"Alle geben einen Zettel mit ihrem Namen ab: neben wem sie gern sitzen (drei Namen) und neben wem lieber nicht (bis zu drei). Vertraulich: Die Angaben sieht nur das Klassenteam. Ihr wertet die Zettel als Soziogramm aus. Aufwendiger, aber die genaueste Grundlage für die Sitzordnung.", cost:2},
     bef_ks:{label:"Klassensprecher befragen", d:"Der Klassensprecher bzw. die Klassensprecherin hört sich in der Klasse um und berichtet euch.", cost:1}
   };
   var SEATREACT = {
@@ -2548,6 +2591,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   function countBy(ids, f){ var n = {}; ids.forEach(function(id){ var l = f(id); if (l) n[l] = (n[l] || 0) + 1; }); return n; }
   function topKey(n){ var best = "", bv = -1; Object.keys(n).forEach(function(k){ if (n[k] > bv){ bv = n[k]; best = k; } }); return best; }
   function surveyResult(kind, sel){
+    if (kind === "bef_sozio") return soziResult();
     var ids = caseIds(), r = {counts:{}, abst:0, quotes:[], note:""};
     if (kind === "bef_plenum"){
       r.counts = countBy(ids, function(id){ return PLENUM[id] || ""; });
@@ -2572,8 +2616,121 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     }
     return r;
   }
+  // ---------- Soziometrische Befragung (Soziogramm) ----------
+  // Dieselbe simulierte anonyme Befragung wie in der Präsentation zu Sitzung 3 (Folie „Soziogramm der E10a“):
+  // je 3 Wahlen „Neben wem sitzt du gern?“ (LM) und bis zu 3 „Neben wem lieber nicht?“ (LL).
+  var SOZIO_NOM = {
+    LM:{jonas:["paul","yusuf","max"], mia:["sarah","max","deniz"], paul:["jonas","max","marco"], tim:["sascha","florian","leon"], lukas:["niklas","deniz","jonas"], nico:["jonas","marco","deniz"], sarah:["mia","max","yusuf"], leon:["florian","sascha","deniz"], yusuf:["jonas","sascha","paul"], dennis:["nico","deniz","marco"], marco:["nico","paul","jonas"], sascha:["yusuf","leon","max"], max:["paul","jonas","sarah"], florian:["niklas","yusuf","mia"], deniz:["nico","yusuf","max"], niklas:["lukas","nico","paul"]},
+    LL:{jonas:["dennis"], mia:["nico","dennis"], paul:["nico","leon"], tim:["nico"], lukas:["marco"], nico:["florian","sarah","niklas"], sarah:["nico","dennis"], leon:["dennis"], yusuf:["dennis"], dennis:["max","deniz","mia"], marco:[], sascha:["nico"], max:["dennis","deniz"], florian:["nico","dennis","deniz"], deniz:["dennis","sascha"], niklas:[]}
+  };
+  var SOZIO_ORDER = ["max","jonas","paul","yusuf","sarah","mia","florian","leon","sascha","tim","marco","nico","deniz","dennis","niklas","lukas"];
+  var SG_STATUS = {beliebt:"beliebt", abgelehnt:"abgelehnt", vernachlaessigt:"vernachlässigt", kontrovers:"kontrovers", durchschnittlich:"durchschnittlich", "nicht eindeutig":"nicht eindeutig"};
+  var SG_COL = {beliebt:"#1b7f45", abgelehnt:"#c0262d", vernachlaessigt:"#6f7a86", kontrovers:"#7a3fb0", durchschnittlich:"#9aa5b1", "nicht eindeutig":"#c9a063"};
+  function soziResult(){
+    var ids = caseIds(), ch = {}, rj = {};
+    ids.forEach(function(id){ ch[id] = (SOZIO_NOM.LM[id] || []).filter(function(x){ return ids.indexOf(x) >= 0; }); rj[id] = (SOZIO_NOM.LL[id] || []).filter(function(x){ return ids.indexOf(x) >= 0; }); });
+    return {counts:{}, abst:0, quotes:[], sozio:{v:2, choices:ch, rejects:rj}, note:"Vertrauliche Befragung aller " + ids.length + " Auszubildenden mit Namen: je drei Namen „Neben wem sitzt du gern?“ und bis zu drei „Neben wem lieber nicht?“. Nur so lassen sich die Wahlen einzelnen Personen zuordnen. Die Angaben sieht nur das Klassenteam, Einzelergebnisse werden nie veröffentlicht."};
+  }
+  function sgLists(s){
+    var lm = {}, ll = {};
+    Object.keys(s.choices || {}).forEach(function(a){ lm[a] = [].concat(s.choices[a] || []); });
+    Object.keys(s.rejects || {}).forEach(function(a){ var r = s.rejects[a]; ll[a] = r == null ? [] : [].concat(r); });
+    return {LM:lm, LL:ll};
+  }
+  // Soziometrischer Status nach Coie, Dodge & Coppotelli (1982): z-standardisierte Wahlen und Ablehnungen
+  function soziStats(s){
+    var N = sgLists(s), ids = caseIds().filter(function(id){ return N.LM[id]; }), lm = {}, ll = {};
+    ids.forEach(function(i){ lm[i] = 0; ll[i] = 0; });
+    ids.forEach(function(j){ (N.LM[j] || []).forEach(function(i){ if (i in lm) lm[i]++; }); (N.LL[j] || []).forEach(function(i){ if (i in ll) ll[i]++; }); });
+    function z(o){ var v = ids.map(function(i){ return o[i]; }), m = v.reduce(function(a, b){ return a + b; }, 0) / (v.length || 1), sd = Math.sqrt(v.reduce(function(a, b){ return a + (b - m) * (b - m); }, 0) / (v.length || 1)) || 1, r = {}; ids.forEach(function(i){ r[i] = (o[i] - m) / sd; }); return r; }
+    function cls(zl, zd){ var sp = zl - zd, si = zl + zd;
+      if (sp > 1 && zl > 0 && zd < 0) return "beliebt"; if (sp < -1 && zl < 0 && zd > 0) return "abgelehnt";
+      if (si < -1 && zl < 0 && zd < 0) return "vernachlaessigt"; if (si > 1 && zl > 0 && zd > 0) return "kontrovers";
+      if (sp > -0.5 && sp < 0.5) return "durchschnittlich"; return "nicht eindeutig"; }
+    var a = z(lm), b = z(ll), st = {};
+    ids.forEach(function(i){ st[i] = {lm:lm[i], ll:ll[i], cls:cls(a[i], b[i])}; });
+    function mutual(x, y){ return (N.LM[x] || []).indexOf(y) >= 0 && (N.LM[y] || []).indexOf(x) >= 0; }
+    var pairs = []; ids.forEach(function(x){ (N.LM[x] || []).forEach(function(y){ if (x < y && mutual(x, y)) pairs.push([x, y]); }); });
+    return {N:N, ids:ids, st:st, mutual:mutual, pairs:pairs};
+  }
+  function soziSvg(s, opt){
+    opt = opt || {};
+    var S = soziStats(s), N = S.N, mode = opt.mode || "lm", focus = opt.focus || null, pre = opt.prefix || "sg";
+    var W = 720, H = 470, cx = 360, cy = 235, R = 195, pos = {};
+    var order = SOZIO_ORDER.filter(function(id){ return S.st[id]; }).concat(S.ids.filter(function(id){ return SOZIO_ORDER.indexOf(id) < 0; }));
+    order.forEach(function(id, i){ var a = -Math.PI / 2 + i / order.length * Math.PI * 2; pos[id] = [cx + Math.cos(a) * R * 1.45, cy + Math.sin(a) * R]; });
+    var out = ['<defs><marker id="' + pre + 'ag" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1b7f45"/></marker><marker id="' + pre + 'ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c0262d"/></marker></defs>'];
+    function edge(a, b, col, mk, dash){
+      var p = pos[a], q = pos[b]; if (!p || !q) return;
+      var dx = q[0] - p[0], dy = q[1] - p[1], L = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / L, uy = dy / L;
+      var x1 = p[0] + ux * 26, y1 = p[1] + uy * 26, x2 = q[0] - ux * 28, y2 = q[1] - uy * 28, mx = (x1 + x2) / 2 - uy * 14, my = (y1 + y2) / 2 + ux * 14;
+      var dim = focus && a !== focus && b !== focus;
+      out.push('<path d="M' + x1.toFixed(1) + ' ' + y1.toFixed(1) + 'Q' + mx.toFixed(1) + ' ' + my.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1) + '" fill="none" stroke="' + col + '" stroke-width="' + (dim ? 1 : 2) + '" stroke-opacity="' + (dim ? .12 : .75) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + ' marker-end="url(#' + pre + mk + ')"/>');
+    }
+    S.ids.forEach(function(a){
+      if (mode === "mut"){ (N.LM[a] || []).forEach(function(b){ if (S.mutual(a, b)) edge(a, b, "#1b7f45", "ag", false); }); return; }
+      if (mode !== "ll") (N.LM[a] || []).forEach(function(b){ edge(a, b, "#1b7f45", "ag", false); });
+      if (mode !== "lm") (N.LL[a] || []).forEach(function(b){ edge(a, b, "#c0262d", "ar", true); });
+    });
+    order.forEach(function(id){
+      var p = pos[id], c = caseById(id); if (!c) return;
+      var k = S.st[id].cls;
+      out.push('<g data-act="sgfocus" data-id="' + esc(id) + '" style="cursor:pointer"><title>' + esc(c.name) + '</title><circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="26" fill="#fff" stroke="' + SG_COL[k] + '" stroke-width="' + (focus === id ? 5 : 3.5) + '"' + (k === "vernachlaessigt" ? ' stroke-dasharray="5 3"' : '') + '/>'
+        + '<svg x="' + (p[0] - 22).toFixed(1) + '" y="' + (p[1] - 22).toFixed(1) + '" width="44" height="44" viewBox="0 0 100 100"><clipPath id="' + pre + 'cp' + id + '"><circle cx="50" cy="50" r="50"/></clipPath><g clip-path="url(#' + pre + 'cp' + id + ')">' + avatarSvg(c).replace(/^<svg[^>]*>|<\/svg>$/g, "") + '</g></svg>'
+        + '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 42).toFixed(1) + '" text-anchor="middle" font-size="13" font-weight="700" font-family="Roboto Condensed,Helvetica Neue,sans-serif" fill="#15202b">' + esc(firstName(c)) + '</text></g>');
+    });
+    return '<svg class="sg' + (opt.big ? ' sg-big' : '') + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Soziogramm der Klasse">' + out.join("") + '</svg>';
+  }
+  function soziModes(){
+    var m = ui.sgMode || "lm";
+    return '<span class="seg sg-seg" role="group" aria-label="Anzeige">' + [["lm","gern neben"],["mut","gegenseitig"],["ll","lieber nicht"],["both","beides"]].map(function(x){ return '<button class="btn sm' + (m === x[0] ? ' on' : '') + '" data-act="sgmode" data-v="' + x[0] + '" aria-pressed="' + (m === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</span>';
+  }
+  function soziLegend(){
+    return '<div class="sg-legend"><span><b style="color:#1b7f45">→</b> „Neben wem sitzt du gern?“ (3 Namen)</span><span><b style="color:#c0262d">⇢</b> „Neben wem lieber nicht?“ (bis zu 3)</span></div>'
+      + '<div class="sg-legend">' + ["beliebt","abgelehnt","vernachlaessigt","kontrovers","durchschnittlich"].map(function(k){ return '<span><i class="sg-dot" style="border-color:' + SG_COL[k] + (k === "vernachlaessigt" ? ';border-style:dashed' : '') + '"></i>' + SG_STATUS[k] + '</span>'; }).join("") + '</div>';
+  }
+  function soziFindings(s, focus){
+    var S = soziStats(s), N = S.N;
+    function fn(id){ var c = caseById(id); return c ? esc(firstName(c)) : esc(id); }
+    if (focus && S.st[focus]){
+      var c = caseById(focus), st = S.st[focus];
+      var gives = (N.LM[focus] || []).map(function(i){ return fn(i) + (S.mutual(focus, i) ? " ⇄" : ""); }).join(", ") || "niemand";
+      var givesNo = (N.LL[focus] || []).map(fn).join(", ") || "niemand";
+      var gets = S.ids.filter(function(j){ return (N.LM[j] || []).indexOf(focus) >= 0; }).map(fn).join(", ") || "niemand";
+      var getsNo = S.ids.filter(function(j){ return (N.LL[j] || []).indexOf(focus) >= 0; }).map(fn).join(", ") || "niemand";
+      return '<div class="sg-find"><h3>' + esc(c.name) + '</h3><span class="chip" style="justify-self:start;color:#fff;background:' + SG_COL[st.cls] + ';border-color:transparent">' + SG_STATUS[st.cls] + '</span>'
+        + '<span><b>Wird gemocht von:</b> ' + gets + '</span><span><b>Wird abgelehnt von:</b> ' + getsNo + '</span><span><b>Mag selbst:</b> ' + gives + '</span><span><b>Lieber nicht neben:</b> ' + givesNo + '</span>'
+        + '<button class="btn sm" data-act="sgfocus" data-id="" style="justify-self:start">Alle anzeigen</button></div>';
+    }
+    var none = S.ids.filter(function(i){ return S.st[i].lm === 0; }).map(fn);
+    var neg = S.ids.filter(function(i){ return S.st[i].ll >= 3; }).sort(function(a, b){ return S.st[b].ll - S.st[a].ll; }).map(function(i){ return fn(i) + " (" + S.st[i].ll + ")"; });
+    var groups = ["beliebt","kontrovers","abgelehnt","vernachlaessigt"].map(function(k){ var l = S.ids.filter(function(i){ return S.st[i].cls === k; }).map(fn); return l.length ? '<span><b style="color:' + SG_COL[k] + '">' + SG_STATUS[k] + ':</b> ' + l.join(", ") + '</span>' : ''; }).join("");
+    return '<div class="sg-find"><h3>Lesehilfe</h3>' + groups
+      + '<b style="margin-top:6px">Für die Sitzordnung</b>'
+      + '<span><b style="color:' + SG_COL.beliebt + '">Gegenseitige Wahlen:</b> ' + (S.pairs.map(function(p){ return fn(p[0]) + " ⇄ " + fn(p[1]); }).join(", ") || "keine") + '</span>'
+      + '<span><b style="color:' + SG_COL.vernachlaessigt + '">Keine Wahl erhalten:</b> ' + (none.join(", ") || "niemand") + '</span>'
+      + '<span><b style="color:' + SG_COL.abgelehnt + '">Viele Ablehnungen:</b> ' + (neg.join(", ") || "niemand") + '</span>'
+      + '<p class="muted small">Person antippen zeigt ihre Wahlen.</p></div>';
+  }
+  function soziHtml(r, compact){
+    var s = r && r.sozio; if (!s) return "";
+    if (compact) return '<div class="sg-wrap">' + soziSvg(s, {mode:"lm", prefix:"sgs"}) + '<button class="btn sm" data-act="showsozio">Soziogramm groß ansehen</button></div>';
+    var note = String(r.note || "").replace(/^Anonyme Befragung/, "Vertrauliche Befragung");
+    return '<div class="sg-wrap">' + soziSvg(s, {mode:"lm", prefix:"sgf"}) + soziLegend() + (note ? '<p class="muted small">' + esc(note) + '</p>' : '') + '<button class="btn sm" data-act="showsozio">Soziogramm groß ansehen</button></div>';
+  }
+  function soziLatest(){ return allMeasures().filter(function(x){ return x.kind === "bef_sozio" && x.result && x.result.sozio; }).sort(function(a, b){ return String(b.at).localeCompare(String(a.at)); })[0] || null; }
+  function renderSozio(){
+    var m = ui.soziShow; if (!m || !m.result || !m.result.sozio) return "";
+    var s = m.result.sozio;
+    return '<div class="scrim" data-act="closesozio"></div><div class="popup sg-pop" role="dialog" aria-modal="true" aria-label="Soziogramm">'
+      + '<div class="sg-head"><div><p class="eyebrow">Ergebnis der Klassenbefragung · ' + esc(fmtDate(localDate(m.at), true)) + '</p><h2>Soziogramm der ' + esc(state.meta.className) + '</h2></div>' + soziModes() + '</div>'
+      + '<div class="sg-pop-grid"><div class="sg-main"><div class="sg-legend"><span class="chip" style="background:var(--school-base);color:#fff;border-color:transparent">Vertraulich befragt</span></div>' + soziLegend() + soziSvg(s, {big:true, mode:ui.sgMode || "lm", focus:ui.sgFocus || null, prefix:"sgp"}) + '</div>'
+      + '<div class="sg-sidepanel">' + soziFindings(s, ui.sgFocus || null) + '<p class="muted small">Nutzt das Soziogramm für den Sitzplan: Wer braucht eine Ankerperson? Welche Paare tragen sich gegenseitig, welche Konstellationen solltet ihr entschärfen? Einzelne Umsetzungen kosten keine Zeit.</p></div></div>'
+      + '<div class="popup-btns"><button class="btn" data-act="sozitoseat">Zum Sitzplan</button><button class="btn primary" data-act="closesozio">Schließen</button></div></div>';
+  }
   function surveyHtml(r){
     if (!r) return "";
+    if (r.sozio) return soziHtml(r, false);
     var keys = Object.keys(LAYOUTS).filter(function(k){ return r.counts[k]; }), max = Math.max.apply(null, [1].concat(keys.map(function(k){ return r.counts[k]; })));
     var h = '<div class="sv">';
     keys.sort(function(a, b){ return r.counts[b] - r.counts[a]; }).forEach(function(k){ h += '<div class="sv-row"><span>' + esc(layoutLabel(k)) + '</span><span class="wc-bar"><i style="width:' + Math.round(r.counts[k] / max * 100) + '%"></i></span><span class="mono wc-n">' + r.counts[k] + '</span></div>'; });
@@ -2597,6 +2754,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (kind === "bef_ks" && !wahlWinner()){ toast("Ihr habt noch keinen Klassensprecher gewählt"); return; }
     var r = surveyResult(kind, sel);
     addMeasureDoc({at:nowISO(), by:myId || "", hours:0, tokens:b.cost, kind:kind, text:b.label + (sel.length ? ": " + sel.map(function(id){ return firstName(caseById(id)); }).join(", ") : "") + ".", students:sel, reactions:[], result:r});
+    if (kind === "bef_sozio") ui.soziShow = soziLatest();
     render(); toast(probeMode() ? "Probe-Befragung – nur bei dir sichtbar" : "Befragung durchgeführt – mit „Online speichern“ für alle sichtbar");
   }
   function shuffled(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
@@ -2667,7 +2825,7 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
         : '<div class="banner"><span><b>Noch gesperrt.</b> Förderstunden stehen erst zur Verfügung, wenn die Schulleitung sie freigegeben hat.</span></div>';
     }
     h += '<div class="mopts">' + cat.items.map(function(x){ var notyet = !measureAllowed(x.k), used1 = x.once && wahlDone(), locked = (x.lock && !unlocked) || notyet || used1; return '<label class="mopt' + (m.kind === x.k ? ' on' : '') + (locked ? ' locked' : '') + '"><input type="radio" name="mkind" id="mk-' + x.k + '" data-mk="' + x.k + '"' + (m.kind === x.k ? ' checked' : '') + (locked ? ' disabled' : '') + '><span><b>' + esc(x.label) + ' <span class="tcost' + (tokenCost(x.k) > T.free ? ' no' : '') + '">' + tokenCost(x.k) + ' ⏱</span></b><span class="muted small">' + esc(x.d) + (used1 ? ' <b>Bereits durchgeführt.</b>' : notyet && actionsOpen() ? ' <b>Ab Sitzung 3.</b>' : '') + '</span></span></label>'; }).join("") + '</div>'
-      + (it && it.k === "wahl" ? '<div class="banner info"><span><b>Zur Wahl stehen:</b> ' + wahlSpec().map(function(x){ return esc(firstName(caseById(x.student))); }).join(", ") + '. Alle 16 Auszubildenden stimmen geheim ab. Wer die meisten Stimmen hat, wird Klassensprecher/in, die oder der Zweite übernimmt die Stellvertretung. Beschreibt unten, wie ihr die Wahl vorbereitet und durchführt.</span></div>' : it && it.all ? '<div class="banner info"><span><b>Gilt für die ganze Klasse.</b> Beschreibt unten, welche Punkte der Vertrag enthält und wie ihr ihn mit der Klasse erarbeitet.</span></div>' : '<div class="field"><span style="font-weight:600;font-size:.88rem">Für wen?' + (it && it.max ? ' <span class="muted small">(höchstens ' + it.max + ')</span>' : '') + '</span><div class="checks">' + state.cases.map(function(c){ return '<label><input type="checkbox" id="m-st-' + esc(c.id) + '" data-mst="' + esc(c.id) + '"' + (m.students.indexOf(c.id) >= 0 ? " checked" : "") + '> ' + esc(firstName(c)) + '</label>'; }).join("") + '</div></div>')
+      + (it && it.k === "bef_sozio" ? '<div class="banner info"><span><b>Soziometrische Befragung.</b> Alle 16 Auszubildenden beantworten vertraulich und mit ihrem Namen zwei Fragen: Neben wem sitzt du gern (drei Namen)? Neben wem lieber nicht (bis zu drei)? Das Ergebnis erscheint als Soziogramm, auch neben dem Sitzplan. Beschreibt unten, wie ihr die Befragung einführt und mit den Ergebnissen umgeht.</span></div>' : '') + (it && it.k === "wahl" ? '<div class="banner info"><span><b>Zur Wahl stehen:</b> ' + wahlSpec().map(function(x){ return esc(firstName(caseById(x.student))); }).join(", ") + '. Alle 16 Auszubildenden stimmen geheim ab. Wer die meisten Stimmen hat, wird Klassensprecher/in, die oder der Zweite übernimmt die Stellvertretung. Beschreibt unten, wie ihr die Wahl vorbereitet und durchführt.</span></div>' : it && it.all && it.k !== "bef_sozio" ? '<div class="banner info"><span><b>Gilt für die ganze Klasse.</b> Beschreibt unten, welche Punkte der Vertrag enthält und wie ihr ihn mit der Klasse erarbeitet.</span></div>' : '<div class="field"><span style="font-weight:600;font-size:.88rem">Für wen?' + (it && it.max ? ' <span class="muted small">(höchstens ' + it.max + ')</span>' : '') + '</span><div class="checks">' + state.cases.map(function(c){ return '<label><input type="checkbox" id="m-st-' + esc(c.id) + '" data-mst="' + esc(c.id) + '"' + (m.students.indexOf(c.id) >= 0 ? " checked" : "") + '> ' + esc(firstName(c)) + '</label>'; }).join("") + '</div></div>')
       + (it && it.cost && unlocked ? '<p class="small ' + (over ? 'w-deny' : 'muted') + '" style="text-align:left">' + (over ? 'Nicht genug Förderstunden: ' : 'Kosten: ') + cost + ' Stunde' + (cost === 1 ? '' : 'n') + ' pro Woche, noch frei: ' + Math.max(0, budget - used) + '</p>' : '')
       + (tooMany ? '<p class="small w-deny" style="text-align:left">Zu viele Personen für diese Form.</p>' : '')
       + (tover ? '<p class="small w-deny" style="text-align:left">Dafür reicht eure Zeit diese Woche nicht (' + tcost + ' Zeit-Token nötig, ' + T.free + ' frei). Wählt eine kleinere Maßnahme oder wartet auf die nächste Sitzung.</p>' : '')
@@ -2678,10 +2836,12 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
   function submitMeasure(){
     var m = ui.measure; if (!m || !m.text.trim() || (!m.students.length && !(MKIND[m.kind] && MKIND[m.kind].all))) return;
     if (!actionsOpen() || !measureAllowed(m.kind)){ toast("Diese Maßnahme ist ab Sitzung 3 möglich"); return; }
+    if (BEF[m.kind] && surveysIn(currentWindow()).some(function(x){ return x.kind === m.kind; })){ toast("Diese Befragung habt ihr diese Woche schon durchgeführt"); return; }
     if (MKIND[m.kind] && MKIND[m.kind].once && wahlDone()){ toast("Die Klassensprecherwahl hat bereits stattgefunden"); return; }
     var itm0 = MKIND[m.kind]; if (itm0 && tokenCost(itm0.k) > tokenState().free){ toast("Dafür reicht eure Zeit diese Woche nicht"); return; }
     var itm = MKIND[m.kind]; if (itm && itm.all) m.students = state.cases.map(function(c){ return c.id; }); if (!itm || (itm.lock && !foerderUnlocked())) return; var hrs = measureCost(itm, m.students); if (hrs && foerderUsed() + hrs > foerderBudget()) return; if (itm.max && m.students.length > itm.max) return;
     var doc = {at:nowISO(), by:myId || "", hours:hrs, tokens:tokenCost(m.kind), kind:m.kind, text:m.text.trim(), students:m.students.slice(), reactions:m.students.map(function(s){ return {student:s, text:reactionFor(s, m.kind)}; }).filter(function(r){ return r.text; })};
+    if (m.kind === "bef_sozio"){ doc.result = soziResult(); doc.reactions = []; doc.students = []; ui.soziShow = doc; }
     if (m.kind === "wahl"){ doc.result = wahlResult(); doc.reactions = wahlReactions(doc.result); ui.wahlShow = doc; }
     try { if (m.team) localStorage.setItem(TEAM_KEY, m.team); } catch(e){}
     myTeam = m.team || myTeam;
@@ -3115,6 +3275,11 @@ nav.tabs button[aria-selected="true"]{font-weight:700;background:rgba(255,255,25
     if (act === "askdelidea"){ ui.confirmDel = t.getAttribute("data-id"); render(); return; }
     if (act === "dodelidea"){ var iid = t.getAttribute("data-id"); ui.confirmDel = null; if (db) db.doc("intern/board/ideas/" + iid).delete(); render(); return; }
     if (act === "viewupd"){ ui.viewCase = null; ui.viewUpd = t.getAttribute("data-id"); render(); return; }
+    if (act === "showsozio"){ ui.sgFocus = null; ui.soziShow = soziLatest(); render(); return; }
+    if (act === "sgmode"){ ui.sgMode = t.getAttribute("data-v"); render(); return; }
+    if (act === "sgfocus"){ var fid = t.getAttribute("data-id") || null; if (!ui.soziShow){ ui.soziShow = soziLatest(); ui.sgFocus = fid; } else ui.sgFocus = ui.sgFocus === fid ? null : fid; render(); return; }
+    if (act === "closesozio"){ ui.soziShow = null; render(); return; }
+    if (act === "sozitoseat"){ ui.soziShow = null; ui.seatDecide = null; ui.measure = null; ui.tab = "klasse"; ui.classView = "seat"; render(); window.scrollTo(0, 0); return; }
     if (act === "closewahl"){ ui.wahlShow = null; render(); return; }
     if (act === "sdopen"){ if (!seatingOpen()){ toast("Die Sitzordnung beschließt ihr ab Sitzung 3"); return; } ui.seatDecide = {layout:liveLayout(), text:"", einzel:[]}; render(); return; }
     if (act === "sdclose"){ ui.seatDecide = null; render(); return; }
